@@ -106,7 +106,7 @@ Curva esperada: V_C(t) = 5 · (1 − e^(−t / 570 ms)). A curva teórica aparec
 
 - **V_S usada no cálculo:** 4,907 V (medida)
 - **Método:** Linearização: ajuste de −ln(1 − V/Vs) × t
-- **Como obtive:** Linearização de y = −ln(1 − V/VS) em função de t, com reta pela origem e τ = 1/inclinação. Usei VS = 4,907 V (último ponto da tabela, t = 2850 ms) e descartei os pontos acima de 95 % de VS, ficando com 46 pontos (R² = 0,9998). O método do ponto de 63,2 % dá 602 ms, o que confirma o resultado.
+- **Como obtive:** Linearização de y = −ln(1 − V/VS) em função de t, com reta pela origem e τ = 1/inclinação. Usei VS = 4,907 V (último ponto da tabela, t = 2850 ms) e descartei os pontos acima de 95 % de VS, ficando com 43 pontos (R² = 0,9998). O método do ponto de 63,2 % dá 602 ms, o que confirma o resultado.
 - **Divergência:** +4,6 % (dentro da tolerância de 25 %)
 
 ## 5. Comprovar
@@ -115,8 +115,8 @@ Curva esperada: V_C(t) = 5 · (1 − e^(−t / 570 ms)). A curva teórica aparec
 | Causa física | Teste que a confirmaria |
 |---|---|
 | A capacitância real do eletrolítico é maior que a nominal de 10 µF (tolerância de ±20 %). Como τ = R·C, um C maior aumenta τ na mesma proporção: +4,6 % corresponderia a C ≈ 10,5 µF. | Medir C com o capacímetro do multímetro (ou um medidor LCR), com o capacitor descarregado e fora do circuito, e recalcular R·C com o valor medido. |
-| A resistência efetiva da malha é maior que os 57 kΩ nominais: tolerância de ±5 % do resistor, somada à resistência dos contatos da protoboard, dos jumpers e à resistência de saída do pino D8. R maior aumenta τ. | Medir R fora do circuito com o ohmímetro, depois medir a resistência total entre D8 e o nó do capacitor na montagem, e recalcular τ com o R real. |
-| Corrente de fuga do eletrolítico: funciona como uma resistência em paralelo com C, fazendo a tensão estabilizar abaixo de 5 V (≈ 4,94 V). Isso torna a VS usada no cálculo ambígua e desloca o τ extraído. | Carregar o capacitor, colocar D8 em alta impedância (pinMode INPUT) e registrar pelo A0 quanto a tensão cai ao longo de alguns minutos; uma queda lenta indica a fuga e permite estimar a resistência de fuga. |
+| A resistência efetiva da malha pode ser maior que os 57 kΩ nominais por causa da tolerância de ±5 % do resistor: como τ = R·C, um R até 5 % maior aumenta τ na mesma proporção. A resistência dos contatos da protoboard, dos jumpers e a resistência de saída do pino D8 (dezenas de ohms) somam menos de 0,1 % de 57 kΩ e são desprezíveis; o efeito relevante é a tolerância do resistor. | Medir R fora do circuito com o ohmímetro, depois medir a resistência total entre D8 e o nó do capacitor na montagem, e recalcular τ com o R real. |
+| Corrente de fuga do eletrolítico: funciona como uma resistência Rf em paralelo com C. O circuito passa a equivaler a uma fonte VS·Rf/(R+Rf) com resistência R∥Rf, então a tensão final fica abaixo de 5 V (≈ 4,94 V, o que corresponde a uma fuga da ordem de 1 µA pelos 57 kΩ) e o τ efetivo, (R∥Rf)·C, fica MENOR que R·C. Portanto a fuga explica o patamar abaixo de 5 V, mas não o τ maior que o previsto; ela torna ambígua a VS usada na linearização, o que desloca levemente o τ extraído. | Carregar o capacitor, colocar D8 em alta impedância (pinMode INPUT) e registrar pelo A0 quanto a tensão cai ao longo de alguns minutos; uma queda lenta indica a fuga e permite estimar a resistência de fuga. |
 
 ### Pergunta de transferência (sem consulta)
 - **Pergunta:** Qual é a diferença do que era esperado teoricamente e a real saída do experimento?
